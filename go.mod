@@ -3,7 +3,7 @@ module go.wit.com/gui/gadgets
 go 1.21.4
 
 require (
-	go.wit.com/gui/gui v0.9.6
+	go.wit.com/gui/gui v0.9.7
 	go.wit.com/log v0.0.0-20240101060000-bf41970f7793
 )
 
