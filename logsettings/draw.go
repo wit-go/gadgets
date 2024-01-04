@@ -80,7 +80,7 @@ func (d *LogSettings) draw() {
 		for s, wg := range myLogGui.groups {
 			log.Log(true, "Dump Flags", s)
 			for _, f := range wg.flags {
-				log.Log(true, "Dump Flags\t", f.Name, ":", f.Desc)
+				log.Log(true, "Dump Flags\t", f.Get(), f.Name, ":", f.Desc)
 			}
 		}
 	})
@@ -90,7 +90,6 @@ func (d *LogSettings) draw() {
 	g.NewButton("Add all Flags", func () {
 		flags := log.ShowFlags()
 		for _, f := range flags {
-			log.Log(true, "Get() ", "(" + f.Subsystem + ")", f.Name, "=", f.B, ":", f.Desc)
 			addFlag(d.flagG, f)
 		}
 	})
@@ -123,12 +122,12 @@ func addFlag(p *gui.Node, newf *log.LogFlag) {
 	}
 
 	for _, f := range flagWidgets.flags {
-		log.Warn("addFlag() Already has flag =", f)
 		if f.Name == newf.Name {
-			log.Warn("addFlag() FOUND FLAG", f)
+			log.Info("addFlag() FOUND FLAG", f)
 			return
 		}
 	}
+	log.Info("addFlag() Adding new flag:", newf.Subsystem, newf.Name)
 	newWidget := gadgets.NewLogFlag(flagWidgets.grid, newf)
 	flagWidgets.flags = append(flagWidgets.flags, newWidget)
 }
