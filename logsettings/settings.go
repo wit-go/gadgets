@@ -13,6 +13,7 @@ func New(p *gui.Node) *LogSettings {
 	myLogGui.parent = p
 	myLogGui.ready = true
 	myLogGui.hidden = true
+	myLogGui.groups = make(map[string]*flagGroup)
 	return myLogGui
 }
 

@@ -18,36 +18,36 @@ type LogFlag struct {
 	p	*gui.Node	// parent widget
 	c	*gui.Node	// checkbox widget
 
-	name string
-	subsystem string
-	desc string
+	Name string
+	Subsystem string
+	Desc string
 	b bool
 
 	Custom func()
 }
 
 func (f *LogFlag) Get() bool {
-	return log.Get(f.subsystem, f.name)
+	return log.Get(f.Subsystem, f.Name)
 }
 
 func (f *LogFlag) Set(b bool) {
 	log.Println("LogFlag.Set() =", b)
-	log.Set(f.subsystem, f.name, b)
+	log.Set(f.Subsystem, f.Name, b)
 }
 
 func NewLogFlag(n *gui.Node, lf *log.LogFlag) *LogFlag {
 	f := LogFlag {
-		name: lf.Name,
-		subsystem: lf.Subsystem,
-		desc: lf.Desc,
+		Name: lf.Name,
+		Subsystem: lf.Subsystem,
+		Desc: lf.Desc,
 		p: n,
 	}
 
 	// various timeout settings
-	f.c = n.NewCheckbox(f.name + " (" + f.desc + ")")
+	f.c = n.NewCheckbox(f.Name + ": " + f.Desc)
 	f.c.Custom = func() {
-		log.Set(f.subsystem, f.name, f.c.B)
-		log.Println("LogFlag.Custom() user changed value to =", log.Get(f.subsystem, f.name))
+		log.Set(f.Subsystem, f.Name, f.c.B)
+		log.Println("LogFlag.Custom() user changed value to =", log.Get(f.Subsystem, f.Name))
 	}
 
 	return &f

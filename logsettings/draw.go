@@ -47,15 +47,19 @@ func (d *LogSettings) draw() {
 	newB = newW.NewBox("hBox", true)
 	g = newB.NewGroup("Show").Pad()
 
-	g.NewButton("log.SetTmp()", func () {
+	g.NewButton("Redirect STDOUT to /tmp/", func () {
 		log.SetTmp()
 	})
 
-	g.NewButton("log.SetAll(true)", func () {
+	g.NewButton("restore defaults", func () {
+		log.SetDefaults()
+	})
+
+	g.NewButton("all on", func () {
 		log.SetAll(true)
 	})
 
-	g.NewButton("log.SetAll(false)", func () {
+	g.NewButton("all off", func () {
 		log.SetAll(false)
 	})
 
@@ -64,11 +68,57 @@ func (d *LogSettings) draw() {
 		log.ShowFlags()
 	})
 
-	g = newB.NewGroup("List")
-	g = g.NewGrid("flags grid", 5, 2)
+	flagG := newB.NewGroup("Subsystem (aka package)")
+
+	g.NewButton("Add all Flags", func () {
+		flags := log.ShowFlags()
+		for _, f := range flags {
+			log.Log(true, "Get() ", "(" + f.Subsystem + ")", f.Name, "=", f.B, ":", f.Desc)
+			addFlag(flagG, f)
+		}
+	})
+
 	flags := log.ShowFlags()
 	for _, f := range flags {
 		log.Log(true, "Get() ", "(" + f.Subsystem + ")", f.Name, "=", f.B, ":", f.Desc)
-		gadgets.NewLogFlag(g, f)
+		addFlag(flagG, f)
 	}
+}
+
+func addFlag(p *gui.Node, newf *log.LogFlag) {
+	var flagWidgets *flagGroup
+	if newf == nil { return }
+	if p == nil { return }
+
+	if myLogGui.groups[newf.Subsystem] == nil {
+		flagWidgets = new(flagGroup)
+		flagWidgets.parent = p
+		flagWidgets.name = newf.Subsystem
+		flagWidgets.group = p.NewGroup(newf.Subsystem)
+		flagWidgets.grid = flagWidgets.group.NewGrid("flags grid", 3, 1)
+		myLogGui.groups[newf.Subsystem] = flagWidgets
+	} else {
+		flagWidgets = myLogGui.groups[newf.Subsystem]
+	}
+
+	for _, f := range flagWidgets.flags {
+		log.Warn("addFlag() Already has flag =", f)
+		if f.Name == newf.Name {
+			log.Warn("addFlag() FOUND FLAG", f)
+			return
+		}
+	}
+	newWidget := gadgets.NewLogFlag(flagWidgets.grid, newf)
+	flagWidgets.flags = append(flagWidgets.flags, newWidget)
+}
+
+type flagGroup struct {
+	name	string // should be set to the flag.Subsystem
+
+	parent	*gui.Node // where to draw our group
+	group *gui.Node
+	grid *gui.Node
+
+	// the widget for each flag
+	flags []*gadgets.LogFlag
 }

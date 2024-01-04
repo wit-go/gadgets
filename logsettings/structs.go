@@ -12,6 +12,8 @@ type LogSettings struct {
 	hidden	bool
 	err	error
 
+	groups map[string]*flagGroup
+
 	parent	*gui.Node // where to draw our window
 	window	*gui.Node // our window for displaying the log package settings
 
