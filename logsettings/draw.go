@@ -25,13 +25,11 @@ func (d *LogSettings) Show() {
 
 func (d *LogSettings) Hide() {
 	if ! d.Ready() {
-		log.Warn("LogSettings.Show() window is not Ready()")
+		log.Warn("LogSettings.Hide() window is not Ready()")
 		return
 	}
 	log.Warn("LogSettings.Hide() window")
-	if ! d.hidden {
-		d.window.Hide()
-	}
+	d.window.Hide()
 	d.hidden = true
 }
 
@@ -39,49 +37,72 @@ func (d *LogSettings) Hide() {
 // These checkboxes should be in the same order as the are printed
 func (d *LogSettings) draw() {
 	if ! d.Ready() {return}
-	var newW, newB, g *gui.Node
+	var g *gui.Node
 
-	newW = d.parent.NewWindow("Debug Flags")
-	newW.Custom = d.parent.StandardClose
+	d.window = d.parent.NewWindow("Debug Flags")
+	d.window.Custom = d.parent.StandardClose
 
-	newB = newW.NewBox("hBox", true)
-	g = newB.NewGroup("Show").Pad()
+	d.box = d.window.NewBox("hBox", true)
+	g = d.box.NewGroup("Show").Pad()
+	d.buttonG = g
 
 	g.NewButton("Redirect STDOUT to /tmp/", func () {
 		log.SetTmp()
 	})
 
 	g.NewButton("restore defaults", func () {
-		log.SetDefaults()
+		for _, wg := range myLogGui.groups {
+			for _, f := range wg.flags {
+				f.SetDefault()
+			}
+		}
 	})
 
 	g.NewButton("all on", func () {
-		log.SetAll(true)
+		for _, wg := range myLogGui.groups {
+			for _, f := range wg.flags {
+				f.Set(true)
+			}
+		}
 	})
 
 	g.NewButton("all off", func () {
-		log.SetAll(false)
+		for _, wg := range myLogGui.groups {
+			for _, f := range wg.flags {
+				f.Set(false)
+			}
+		}
 	})
 
 	g.NewButton("Dump Flags", func () {
 		// ShowDebugValues()
 		log.ShowFlags()
+		for s, wg := range myLogGui.groups {
+			log.Log(true, "Dump Flags", s)
+			for _, f := range wg.flags {
+				log.Log(true, "Dump Flags\t", f.Name, ":", f.Desc)
+			}
+		}
 	})
 
-	flagG := newB.NewGroup("Subsystem (aka package)")
+	d.flagG = d.box.NewGroup("Subsystem (aka package)")
 
 	g.NewButton("Add all Flags", func () {
 		flags := log.ShowFlags()
 		for _, f := range flags {
 			log.Log(true, "Get() ", "(" + f.Subsystem + ")", f.Name, "=", f.B, ":", f.Desc)
-			addFlag(flagG, f)
+			addFlag(d.flagG, f)
 		}
+	})
+
+	g.NewButton("Close", func () {
+		d.Hide()
 	})
 
 	flags := log.ShowFlags()
 	for _, f := range flags {
 		log.Log(true, "Get() ", "(" + f.Subsystem + ")", f.Name, "=", f.B, ":", f.Desc)
-		addFlag(flagG, f)
+		addFlag(d.flagG, f)
 	}
 }
 

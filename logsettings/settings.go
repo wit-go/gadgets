@@ -20,7 +20,6 @@ func New(p *gui.Node) *LogSettings {
 func (ls *LogSettings) Set(b bool) {
 	// log.Set(ls.name, b)
 	log.Warn("log.Set() FIXME: not working here anymore")
-	ls.checkbox.Set(b)
 }
 
 // Returns true if the status is valid
