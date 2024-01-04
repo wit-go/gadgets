@@ -12,7 +12,7 @@ func New(p *gui.Node) *LogSettings {
 	myLogGui = new(LogSettings)
 	myLogGui.parent = p
 	myLogGui.ready = true
-	myLogGui.hidden = false
+	myLogGui.hidden = true
 	return myLogGui
 }
 
