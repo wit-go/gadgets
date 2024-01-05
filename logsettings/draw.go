@@ -28,7 +28,6 @@ func (d *LogSettings) draw() {
 	var g *gui.Node
 
 	d.win = gadgets.NewBasicWindow(d.parent, "Debug Flags")
-
 	g = d.win.Box().NewGroup("Show").Pad()
 	d.buttonG = g
 
