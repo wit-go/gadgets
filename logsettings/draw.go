@@ -7,43 +7,29 @@ import 	(
 )
 
 func (d *LogSettings) Show() {
-	if ! d.Ready() {
-		log.Warn("LogSettings.Show() window is not Ready()")
-		return
-	}
-	log.Warn("LogSettings.Show() window")
-	if d.hidden {
-		log.Warn("LogSettings.Show() window HERE window =", d.window)
-		if d.window == nil {
-			log.Warn("LogSettings.Show() create the window")
-			d.draw()
-		}
-		d.window.Show()
-	}
-	d.hidden = false
+	if ! d.Ready() { return }
+	d.win.Show()
 }
 
 func (d *LogSettings) Hide() {
-	if ! d.Ready() {
-		log.Warn("LogSettings.Hide() window is not Ready()")
-		return
-	}
-	log.Warn("LogSettings.Hide() window")
-	d.window.Hide()
-	d.hidden = true
+	if ! d.Ready() { return }
+	d.win.Hide()
+}
+
+// alternates between showing and hiding the window
+func (d *LogSettings) Toggle() {
+	if ! d.Ready() { return }
+	d.win.Toggle()
 }
 
 // Let's you toggle on and off the various types of debugging output
 // These checkboxes should be in the same order as the are printed
 func (d *LogSettings) draw() {
-	if ! d.Ready() {return}
 	var g *gui.Node
 
-	d.window = d.parent.NewWindow("Debug Flags")
-	d.window.Custom = d.parent.StandardClose
+	d.win = gadgets.NewBasicWindow(d.parent, "Debug Flags")
 
-	d.box = d.window.NewBox("hBox", true)
-	g = d.box.NewGroup("Show").Pad()
+	g = d.win.Box().NewGroup("Show").Pad()
 	d.buttonG = g
 
 	g.NewButton("Redirect STDOUT to /tmp/", func () {
@@ -85,7 +71,7 @@ func (d *LogSettings) draw() {
 		}
 	})
 
-	d.flagG = d.box.NewGroup("Subsystem (aka package)")
+	d.flagG = d.win.Box().NewGroup("Subsystem (aka package)")
 
 	g.NewButton("Add all Flags", func () {
 		flags := log.ShowFlags()

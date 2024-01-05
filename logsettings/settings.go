@@ -11,21 +11,19 @@ func New(p *gui.Node) *LogSettings {
 	if myLogGui != nil {return myLogGui}
 	myLogGui = new(LogSettings)
 	myLogGui.parent = p
+	myLogGui.groups = make(map[string]*flagGroup)
 	myLogGui.ready = true
 	myLogGui.hidden = true
-	myLogGui.groups = make(map[string]*flagGroup)
 	return myLogGui
-}
-
-func (ls *LogSettings) Set(b bool) {
-	// log.Set(ls.name, b)
-	log.Warn("log.Set() FIXME: not working here anymore")
 }
 
 // Returns true if the status is valid
 func (d *LogSettings) Ready() bool {
 	if d == nil {return false}
 	if ! d.parent.Ready() {return false}
+	if (d.win == nil) {
+		d.draw()
+	}
 	return d.ready
 }
 
