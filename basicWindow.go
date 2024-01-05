@@ -11,6 +11,7 @@ import 	(
 type BasicWindow struct {
 	ready	bool
 	hidden	bool
+	vertical bool
 	name	string
 
 	parent	*gui.Node
@@ -52,24 +53,58 @@ func (w *BasicWindow) Title(title string) {
 	return
 }
 
-// Returns true if the status is valid
-func (w *BasicWindow) Ready() bool {
+// Returns true if initialized
+func (w *BasicWindow) Initialized() bool {
 	if w == nil {return false}
 	if w.parent == nil {return false}
+	return true
+}
+
+// Returns true if the status is valid
+func (w *BasicWindow) Ready() bool {
+	if ! w.Initialized() {return false}
 	if ! w.parent.Ready() {return false}
-	if (w.win == nil) {
-		w.Draw()
-	}
 	return w.ready
 }
 
 func (w *BasicWindow) Box() *gui.Node {
+	if ! w.Initialized() {return nil}
+	if (w.win == nil) {
+		w.Draw()
+	}
 	return w.box
 }
 
+func (w *BasicWindow) Vertical() {
+	log.Warn("BasicWindow() w.vertical =", w.vertical)
+	if ! w.Initialized() {
+		log.Warn("BasicWindow() not Initialized yet()")
+		return
+	}
+	if w.Ready() {
+		log.Warn("BasicWindow() is already created. You can not change it to Vertical now (TODO: fix this)")
+		return
+	}
+	w.vertical = true
+	log.Warn("BasicWindow() w.vertical =", w.vertical)
+}
+
 func (w *BasicWindow) Draw() {
+	if ! w.Initialized() {return}
+	// various timeout settings
+	w.win = w.parent.NewWindow(w.name)
+	w.win.Custom = func() {
+		log.Println("BasicWindow.Custom() closed. TODO: handle this", w.name)
+	}
+	if w.vertical {
+		w.box = w.win.NewBox("bw vbox", false)
+		log.Warn("BasicWindow.Custom() made vbox")
+	} else {
+		w.box = w.win.NewBox("bw hbox", true)
+		log.Warn("BasicWindow.Custom() made hbox")
+	}
+
 	w.ready = true
-	return
 }
 
 
@@ -78,14 +113,8 @@ func NewBasicWindow(parent *gui.Node, name string) *BasicWindow {
 	w = &BasicWindow {
 		parent: parent,
 		name: name,
+		vertical: false,
 	}
-
-	// various timeout settings
-	w.win = w.parent.NewWindow(name)
-	w.win.Custom = func() {
-		log.Println("BasicWindow.Custom() closed. TODO: handle this", w.name)
-	}
-	w.box = w.win.NewBox("hBox", true)
 
 	return w
 }
