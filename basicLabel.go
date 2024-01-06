@@ -32,7 +32,7 @@ func (n *BasicLabel) Get() string {
 }
 
 func (n *BasicLabel) Set(value string) *BasicLabel {
-	log.Println("BasicLabel.Set() =", value)
+	log.Log(INFO, "BasicLabel.Set() =", value)
 	if (n.v != nil) {
 		n.v.Set(value)
 	}
@@ -53,7 +53,7 @@ func (ngui *Node) NewBasicLabel(name string) *BasicLabel {
 	d.v = n.NewLabel("")
 	d.v.Custom = func() {
 		d.value = d.v.S
-		log.Println("BasicLabel.Custom() user changed value to =", d.value)
+		log.Log(INFO, "BasicLabel.Custom() user changed value to =", d.value)
 	}
 
 	return &d

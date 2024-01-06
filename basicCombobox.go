@@ -43,14 +43,14 @@ func (d *BasicCombobox) Ready() bool {
 
 func (d *BasicCombobox) Add(value string) {
 	if ! d.Ready() {return}
-	log.Println("BasicCombobox.Add() =", value)
+	log.Log(INFO, "BasicCombobox.Add() =", value)
 	d.d.AddDropdownName(value)
 	return
 }
 
 func (d *BasicCombobox) Set(value string) bool {
 	if ! d.Ready() {return false}
-	log.Println("BasicCombobox.Set() =", value)
+	log.Log(INFO, "BasicCombobox.Set() =", value)
 	d.d.SetText(value)
 	d.value = value
 	return true
@@ -68,7 +68,7 @@ func NewBasicCombobox(p *gui.Node, name string) *BasicCombobox {
 	d.d = p.NewCombobox("")
 	d.d.Custom = func() {
 		d.value = d.Get()
-		log.Println("BasicCombobox.Custom() user changed value to =", d.value)
+		log.Log(INFO, "BasicCombobox.Custom() user changed value to =", d.value)
 		if d.Custom != nil {
 			d.Custom()
 		}

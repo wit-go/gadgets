@@ -30,7 +30,7 @@ func (n *OneLiner) Get() string {
 }
 
 func (n *OneLiner) Set(value string) *OneLiner {
-	log.Println("OneLiner.Set() =", value)
+	log.Log(INFO, "OneLiner.Set() =", value)
 	if (n.v != nil) {
 		n.v.Set(value)
 	}
@@ -49,7 +49,7 @@ func NewOneLiner(n *gui.Node, name string) *OneLiner {
 	d.v = n.NewLabel("")
 	d.v.Custom = func() {
 		d.value = d.v.S
-		log.Println("OneLiner.Custom() user changed value to =", d.value)
+		log.Log(INFO, "OneLiner.Custom() user changed value to =", d.value)
 	}
 
 	return &d

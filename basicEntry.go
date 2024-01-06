@@ -30,7 +30,7 @@ func (n *BasicEntry) Get() string {
 }
 
 func (n *BasicEntry) Set(value string) *BasicEntry {
-	log.Println("BasicEntry.Set() =", value)
+	log.Log(INFO, "BasicEntry.Set() =", value)
 	if (n.v != nil) {
 		n.v.Set(value)
 	}
@@ -49,7 +49,7 @@ func NewBasicEntry(p *gui.Node, name string) *BasicEntry {
 	d.v = p.NewEntryLine("")
 	d.v.Custom = func() {
 		d.value = d.v.S
-		log.Println("BasicEntry.Custom() user changed value to =", d.value)
+		log.Log(INFO, "BasicEntry.Custom() user changed value to =", d.value)
 	}
 
 	return &d

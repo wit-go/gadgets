@@ -5,10 +5,10 @@
 package gadgets
 
 import 	(
-	"log"
 	"fmt"
 	"time"
 
+	"go.wit.com/log"
 	"go.wit.com/gui/gui"
 )
 
@@ -42,13 +42,13 @@ func (n *Duration) Set(d time.Duration) {
 	timeRange = n.High - n.Low
 	step = timeRange / 1000
 	if (step == 0) {
-		log.Println("duration.Set() division by step == 0", n.Low, n.High, timeRange, step)
+		log.Log(INFO, "duration.Set() division by step == 0", n.Low, n.High, timeRange, step)
 		n.s.Set(0)
 		return
 	}
 	offset = d - n.Low
 	i := int(offset / step)
-	log.Println("duration.Set() =", n.Low, n.High, d, "i =", i)
+	log.Log(INFO, "duration.Set() =", n.Low, n.High, d, "i =", i)
 	n.s.I = i
 	n.s.Set(i)
 	n.s.Custom()

@@ -43,14 +43,14 @@ func (d *BasicDropdown) Ready() bool {
 
 func (d *BasicDropdown) Add(value string) {
 	if ! d.Ready() {return}
-	log.Println("BasicDropdown.Set() =", value)
+	log.Log(INFO, "BasicDropdown.Set() =", value)
 	d.d.AddDropdownName(value)
 	return
 }
 
 func (d *BasicDropdown) Set(value string) bool {
 	if ! d.Ready() {return false}
-	log.Println("BasicDropdown.Set() =", value)
+	log.Log(INFO, "BasicDropdown.Set() =", value)
 	d.l.SetText(value)
 	d.value = value
 	return true
@@ -68,7 +68,7 @@ func NewBasicDropdown(p *gui.Node, name string) *BasicDropdown {
 	d.d = p.NewDropdown("")
 	d.d.Custom = func() {
 		d.value = d.Get()
-		log.Println("BasicDropdown.Custom() user changed value to =", d.value)
+		log.Log(INFO, "BasicDropdown.Custom() user changed value to =", d.value)
 		if d.Custom != nil {
 			d.Custom()
 		}

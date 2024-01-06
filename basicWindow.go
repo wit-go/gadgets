@@ -76,7 +76,7 @@ func (w *BasicWindow) Box() *gui.Node {
 }
 
 func (w *BasicWindow) Vertical() {
-	log.Warn("BasicWindow() w.vertical =", w.vertical)
+	log.Log(INFO, "BasicWindow() w.vertical =", w.vertical)
 	if ! w.Initialized() {
 		log.Warn("BasicWindow() not Initialized yet()")
 		return
@@ -86,7 +86,7 @@ func (w *BasicWindow) Vertical() {
 		return
 	}
 	w.vertical = true
-	log.Warn("BasicWindow() w.vertical =", w.vertical)
+	log.Log(INFO, "BasicWindow() w.vertical =", w.vertical)
 }
 
 func (w *BasicWindow) Draw() {
@@ -94,14 +94,14 @@ func (w *BasicWindow) Draw() {
 	// various timeout settings
 	w.win = w.parent.NewWindow(w.name)
 	w.win.Custom = func() {
-		log.Println("BasicWindow.Custom() closed. TODO: handle this", w.name)
+		log.Warn("BasicWindow.Custom() closed. TODO: handle this", w.name)
 	}
 	if w.vertical {
 		w.box = w.win.NewBox("bw vbox", false)
-		log.Warn("BasicWindow.Custom() made vbox")
+		log.Log(INFO, "BasicWindow.Custom() made vbox")
 	} else {
 		w.box = w.win.NewBox("bw hbox", true)
-		log.Warn("BasicWindow.Custom() made hbox")
+		log.Log(INFO, "BasicWindow.Custom() made hbox")
 	}
 
 	w.ready = true
