@@ -89,6 +89,24 @@ func (w *BasicWindow) Vertical() {
 	log.Log(INFO, "BasicWindow() w.vertical =", w.vertical)
 }
 
+func (w *BasicWindow) Make() {
+	if ! w.Initialized() {return}
+	// various timeout settings
+	w.win = w.parent.RawWindow(w.name)
+	w.win.Custom = func() {
+		log.Warn("BasicWindow.Custom() closed. TODO: handle this", w.name)
+	}
+	if w.vertical {
+		w.box = w.win.NewBox("bw vbox", false)
+		log.Log(INFO, "BasicWindow.Custom() made vbox")
+	} else {
+		w.box = w.win.NewBox("bw hbox", true)
+		log.Log(INFO, "BasicWindow.Custom() made hbox")
+	}
+
+	w.ready = true
+}
+
 func (w *BasicWindow) Draw() {
 	if ! w.Initialized() {return}
 	// various timeout settings
