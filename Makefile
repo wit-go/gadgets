@@ -17,6 +17,9 @@ redomod:
 	go mod tidy
 
 github:
+	git push origin master
+	git push origin devel
+	git push origin --tags
 	git push github master
 	git push github devel
 	git push github --tags
