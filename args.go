@@ -9,10 +9,8 @@ import (
 var INFO log.LogFlag
 
 func init() {
-	INFO.B = false
-	INFO.Name = "INFO"
-	INFO.Subsystem = "gadgets"
-	INFO.Short = "gadgets"
-	INFO.Desc = "general info"
-	INFO.Register()
+	full := "go.wit.com/gui/gadget"
+	short := "gadgets"
+
+	INFO.NewFlag("INFO", false, full, short, "General Info")
 }

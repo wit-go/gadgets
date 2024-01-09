@@ -17,6 +17,7 @@ import 	(
 type LogFlag struct {
 	p	*gui.Node	// parent widget
 	c	*gui.Node	// checkbox widget
+	lf	*log.LogFlag
 
 	Name string
 	Subsystem string
@@ -28,29 +29,28 @@ type LogFlag struct {
 }
 
 func (f *LogFlag) Get() bool {
-	return log.Get(f.Subsystem, f.Name)
+	return f.lf.Get()
 }
 
 func (f *LogFlag) Set(b bool) {
 	log.Info("LogFlag.Set() =", b)
-	log.Set(f.Subsystem, f.Name, b)
+	f.lf.Set(b)
 	f.c.Set(b)
 }
 
 func (f *LogFlag) SetDefault() {
 	log.Info("LogFlag.SetDefault() =", f.Default)
-	log.Set(f.Subsystem, f.Name, f.Default)
-	f.c.Set(f.Default)
+	f.lf.SetDefault()
+	f.c.Set(f.lf.Get())
 }
 
 func NewLogFlag(n *gui.Node, lf *log.LogFlag) *LogFlag {
 	f := LogFlag {
-		Name: lf.Name,
-		Subsystem: lf.Subsystem,
-		Desc: lf.Desc,
-		Default: lf.Default,
 		p: n,
 	}
+	f.Name = lf.GetName()
+	f.Subsystem = lf.GetSubsystem()
+	f.Desc = lf.GetDesc()
 
 	// various timeout settings
 	f.c = n.NewCheckbox(f.Name + ": " + f.Desc)
@@ -58,7 +58,7 @@ func NewLogFlag(n *gui.Node, lf *log.LogFlag) *LogFlag {
 		log.Set(f.Subsystem, f.Name, f.c.B)
 		log.Info("LogFlag.Custom() user changed value to =", log.Get(f.Subsystem, f.Name))
 	}
-	f.c.Set(lf.B)
+	f.c.Set(lf.Get())
 
 	return &f
 }

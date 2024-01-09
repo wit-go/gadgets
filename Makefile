@@ -23,3 +23,6 @@ github:
 	git push github master
 	git push github devel
 	git push github --tags
+
+goproxy:
+	GOPROXY=https://proxy.golang.org GO111MODULE=on go get go.wit.com/gui/gadgets@v0.10

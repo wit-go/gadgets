@@ -63,9 +63,9 @@ func (d *LogSettings) draw() {
 		// ShowDebugValues()
 		log.ShowFlags()
 		for s, wg := range myLogGui.groups {
-			log.Log(true, "Dump Flags", s)
+			log.Info("Dump Flags", s)
 			for _, f := range wg.flags {
-				log.Log(true, "Dump Flags\t", f.Get(), f.Name, ":", f.Desc)
+				log.Info("Dump Flags\t", f.Get(), f.Name, ":", f.Desc)
 			}
 		}
 	})
@@ -85,7 +85,6 @@ func (d *LogSettings) draw() {
 
 	flags := log.ShowFlags()
 	for _, f := range flags {
-		log.Log(true, "Get() ", "(" + f.Subsystem + ")", f.Name, "=", f.B, ":", f.Desc)
 		addFlag(d.flagG, f)
 	}
 }
@@ -95,24 +94,27 @@ func addFlag(p *gui.Node, newf *log.LogFlag) {
 	if newf == nil { return }
 	if p == nil { return }
 
-	if myLogGui.groups[newf.Subsystem] == nil {
+	subsys := newf.GetSubsystem()
+	name := newf.GetName()
+
+	if myLogGui.groups[subsys] == nil {
 		flagWidgets = new(flagGroup)
 		flagWidgets.parent = p
-		flagWidgets.name = newf.Subsystem
-		flagWidgets.group = p.NewGroup(newf.Subsystem)
+		flagWidgets.name = subsys
+		flagWidgets.group = p.NewGroup(subsys)
 		flagWidgets.grid = flagWidgets.group.NewGrid("flags grid", 3, 1)
-		myLogGui.groups[newf.Subsystem] = flagWidgets
+		myLogGui.groups[subsys] = flagWidgets
 	} else {
-		flagWidgets = myLogGui.groups[newf.Subsystem]
+		flagWidgets = myLogGui.groups[subsys]
 	}
 
 	for _, f := range flagWidgets.flags {
-		if f.Name == newf.Name {
+		if f.Name == name {
 			log.Info("addFlag() FOUND FLAG", f)
 			return
 		}
 	}
-	log.Info("addFlag() Adding new flag:", newf.Subsystem, newf.Name)
+	log.Info("addFlag() Adding new flag:", subsys, name)
 	newWidget := gadgets.NewLogFlag(flagWidgets.grid, newf)
 	flagWidgets.flags = append(flagWidgets.flags, newWidget)
 }
