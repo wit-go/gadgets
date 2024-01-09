@@ -55,8 +55,8 @@ func NewLogFlag(n *gui.Node, lf *log.LogFlag) *LogFlag {
 	// various timeout settings
 	f.c = n.NewCheckbox(f.Name + ": " + f.Desc)
 	f.c.Custom = func() {
-		log.Set(f.Subsystem, f.Name, f.c.B)
-		log.Info("LogFlag.Custom() user changed value to =", log.Get(f.Subsystem, f.Name))
+		f.lf.Set(f.c.B)
+		log.Info("LogFlag.Custom() user changed value to =", f.lf.Get())
 	}
 	f.c.Set(lf.Get())
 
