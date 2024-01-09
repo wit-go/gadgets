@@ -29,6 +29,7 @@ func (d *LogSettings) draw() {
 
 	d.win = gadgets.NewBasicWindow(d.parent, "Debug Flags")
 	g = d.win.Box().NewGroup("Show").Pad()
+	g = g.NewBox("bw vbox", false)
 	d.buttonG = g
 
 	g.NewButton("Redirect STDOUT to /tmp/", func () {
@@ -71,6 +72,7 @@ func (d *LogSettings) draw() {
 	})
 
 	d.flagG = d.win.Box().NewGroup("Subsystem (aka package)")
+	d.flagG = d.flagG.NewBox("bw vbox", false)
 
 	g.NewButton("Add all Flags", func () {
 		flags := log.ShowFlags()
