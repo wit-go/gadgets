@@ -12,6 +12,9 @@
 package gadgets
 
 import 	(
+	"reflect"
+	"strconv"
+
 	"go.wit.com/log"
 	"go.wit.com/gui/gui"
 )
@@ -27,6 +30,8 @@ type BasicCombobox struct {
 	value	string
 	label	string
 
+	values map[string]string
+
 	Custom func()
 }
 
@@ -41,18 +46,74 @@ func (d *BasicCombobox) Ready() bool {
 	return d.ready
 }
 
-func (d *BasicCombobox) Add(value string) {
+func (d *BasicCombobox) Add(value any) {
 	if ! d.Ready() {return}
 	log.Log(INFO, "BasicCombobox.Add() =", value)
-	d.d.AddDropdownName(value)
-	return
+
+	var b reflect.Kind
+	b = reflect.TypeOf(value).Kind()
+
+	switch b {
+	case reflect.Int:
+		var i int
+		i = value.(int)
+		s := strconv.Itoa(i)
+		if d.values[s] != "added" {
+			d.values[s] = "added"
+			d.d.AddDropdownName(s)
+		}
+	case reflect.String:
+		s := value.(string)
+		if d.values[s] != "added" {
+			d.values[s] = "added"
+			d.d.AddDropdownName(s)
+		}
+	case reflect.Bool:
+		if value.(bool) == true {
+			s := "true"
+			if d.values[s] != "added" {
+				d.values[s] = "added"
+				d.d.AddDropdownName(s)
+			}
+		} else {
+			s := "false"
+			if d.values[s] != "added" {
+				d.values[s] = "added"
+				d.d.AddDropdownName(s)
+			}
+		}
+	default:
+	}
 }
 
-func (d *BasicCombobox) Set(value string) bool {
+func (d *BasicCombobox) Set(value any) bool {
 	if ! d.Ready() {return false}
 	log.Log(INFO, "BasicCombobox.Set() =", value)
-	d.d.SetText(value)
-	d.value = value
+
+	var b reflect.Kind
+	b = reflect.TypeOf(value).Kind()
+
+	switch b {
+	case reflect.Int:
+		var i int
+		i = value.(int)
+		s := strconv.Itoa(i)
+		d.d.SetText(s)
+		d.value = s
+	case reflect.String:
+		d.d.SetText(value.(string))
+		d.value = value.(string)
+	case reflect.Bool:
+		if value.(bool) == true {
+			d.d.SetText("true")
+			d.value = "true"
+		} else {
+			d.d.SetText("false")
+			d.value = "false"
+		}
+	default:
+		return false
+	}
 	return true
 }
 
@@ -73,7 +134,7 @@ func NewBasicCombobox(p *gui.Node, name string) *BasicCombobox {
 			d.Custom()
 		}
 	}
-
+	d.values = make(map[string]string)
 	d.ready = true
 	return &d
 }
