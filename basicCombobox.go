@@ -58,6 +58,12 @@ func (d *BasicCombobox) Disable() {
 	d.d.Disable()
 }
 
+func (d *BasicCombobox) SetTitle(name string) {
+	if d == nil {return}
+	if d.d == nil {return}
+	d.d.SetText(name)
+}
+
 func (d *BasicCombobox) Add(value any) {
 	if ! d.Ready() {return}
 	log.Log(INFO, "BasicCombobox.Add() =", value)
