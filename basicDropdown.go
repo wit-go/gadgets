@@ -48,10 +48,16 @@ func (d *BasicDropdown) Add(value string) {
 	return
 }
 
+func (d *BasicDropdown) SetLabel(value string) bool {
+	if ! d.Ready() {return false}
+	log.Log(INFO, "BasicDropdown.SetLabel() =", value)
+	d.l.SetText(value)
+	return true
+}
 func (d *BasicDropdown) Set(value string) bool {
 	if ! d.Ready() {return false}
 	log.Log(INFO, "BasicDropdown.Set() =", value)
-	d.l.SetText(value)
+	d.d.SetText(value)
 	d.value = value
 	return true
 }

@@ -38,6 +38,28 @@ func (n *OneLiner) Set(value string) *OneLiner {
 	return n
 }
 
+func (n *OneLiner) SetLabel(value string) *OneLiner {
+	log.Log(INFO, "OneLiner.SetLabel() =", value)
+	if (n.l != nil) {
+		n.l.Set(value)
+	}
+	return n
+}
+
+func (n *OneLiner) Enable() {
+	log.Log(INFO, "OneLiner.Enable()")
+	if (n.v != nil) {
+		n.v.Show()
+	}
+}
+
+func (n *OneLiner) Disable() {
+	log.Log(INFO, "OneLiner.Disable()")
+	if (n.v != nil) {
+		n.v.Hide()
+	}
+}
+
 func NewOneLiner(n *gui.Node, name string) *OneLiner {
 	d := OneLiner {
 		p: n,

@@ -38,6 +38,28 @@ func (n *BasicEntry) Set(value string) *BasicEntry {
 	return n
 }
 
+func (n *BasicEntry) Enable() {
+	log.Log(INFO, "BasicEntry.Enable()")
+	if (n.v != nil) {
+		n.v.Enable()
+	}
+}
+
+func (n *BasicEntry) Disable() {
+	log.Log(INFO, "BasicEntry.Disable()")
+	if (n.v != nil) {
+		n.v.Disable()
+	}
+}
+
+func (n *BasicEntry) SetLabel(value string) *BasicEntry {
+	log.Log(INFO, "BasicEntry.SetLabel() =", value)
+	if (n.l != nil) {
+		n.l.Set(value)
+	}
+	return n
+}
+
 func NewBasicEntry(p *gui.Node, name string) *BasicEntry {
 	d := BasicEntry {
 		parent: p,
@@ -50,6 +72,9 @@ func NewBasicEntry(p *gui.Node, name string) *BasicEntry {
 	d.v.Custom = func() {
 		d.value = d.v.S
 		log.Log(INFO, "BasicEntry.Custom() user changed value to =", d.value)
+		if d.Custom != nil {
+			d.Custom()
+		}
 	}
 
 	return &d

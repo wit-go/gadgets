@@ -46,6 +46,18 @@ func (d *BasicCombobox) Ready() bool {
 	return d.ready
 }
 
+func (d *BasicCombobox) Enable() {
+	if d == nil {return}
+	if d.d == nil {return}
+	d.d.Enable()
+}
+
+func (d *BasicCombobox) Disable() {
+	if d == nil {return}
+	if d.d == nil {return}
+	d.d.Disable()
+}
+
 func (d *BasicCombobox) Add(value any) {
 	if ! d.Ready() {return}
 	log.Log(INFO, "BasicCombobox.Add() =", value)
@@ -128,8 +140,8 @@ func NewBasicCombobox(p *gui.Node, name string) *BasicCombobox {
 	d.l = p.NewLabel(name)
 	d.d = p.NewCombobox("")
 	d.d.Custom = func() {
-		d.value = d.Get()
-		log.Log(INFO, "BasicCombobox.Custom() user changed value to =", d.value)
+		d.value = d.d.GetText()
+		log.Warn("BasicCombobox.Custom() user changed value to =", d.value)
 		if d.Custom != nil {
 			d.Custom()
 		}
