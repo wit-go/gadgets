@@ -49,7 +49,7 @@ func (n *Duration) Set(d time.Duration) {
 	offset = d - n.Low
 	i := int(offset / step)
 	log.Log(INFO, "duration.Set() =", n.Low, n.High, d, "i =", i)
-	n.s.I = i
+	// n.s.I = i
 	n.s.Set(i)
 	n.s.Custom()
 }
@@ -66,7 +66,7 @@ func NewDurationSlider(n *gui.Node, label string, low time.Duration, high time.D
 	d.l = n.NewLabel(label)
 	d.s = n.NewSlider(label, 0, 1000)
 	d.s.Custom = func () {
-		d.Duration = low + (high - low) * time.Duration(d.s.I) / 1000
+		d.Duration = low + (high - low) * time.Duration(d.s.GetInt()) / 1000
 		log.Println("d.Duration =", d.Duration)
 		s := fmt.Sprintf("%s (%v)", d.Label, d.Duration)
 		d.l.SetText(s)

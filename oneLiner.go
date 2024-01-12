@@ -70,7 +70,7 @@ func NewOneLiner(n *gui.Node, name string) *OneLiner {
 	d.l = n.NewLabel(name)
 	d.v = n.NewLabel("")
 	d.v.Custom = func() {
-		d.value = d.v.S
+		d.value = d.v.GetText()
 		log.Log(INFO, "OneLiner.Custom() user changed value to =", d.value)
 	}
 

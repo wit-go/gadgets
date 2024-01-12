@@ -52,7 +52,7 @@ func (ngui *Node) NewBasicLabel(name string) *BasicLabel {
 	d.l = n.NewLabel(name)
 	d.v = n.NewLabel("")
 	d.v.Custom = func() {
-		d.value = d.v.S
+		d.value = d.v.GetText()
 		log.Log(INFO, "BasicLabel.Custom() user changed value to =", d.value)
 	}
 

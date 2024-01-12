@@ -12,7 +12,7 @@ type BasicWindow struct {
 	ready	bool
 	hidden	bool
 	vertical bool
-	name	string
+	title	string
 
 	parent	*gui.Node
 	win	*gui.Node	// window widget
@@ -76,32 +76,32 @@ func (w *BasicWindow) Box() *gui.Node {
 }
 
 func (w *BasicWindow) Vertical() {
-	log.Log(INFO, "BasicWindow() w.vertical =", w.vertical)
-	if ! w.Initialized() {
-		log.Warn("BasicWindow() not Initialized yet()")
-		return
-	}
-	if w.Ready() {
-		log.Warn("BasicWindow() is already created. You can not change it to Vertical now (TODO: fix this)")
-		return
-	}
+	log.Warn("BasicWindow() Vertical() START w.vertical =", w.vertical, w.title)
+	if w == nil {return}
 	w.vertical = true
-	log.Log(INFO, "BasicWindow() w.vertical =", w.vertical)
+	log.Warn("BasicWindow() Vertical() END w.vertical =", w.vertical, w.title)
+}
+
+func (w *BasicWindow) Horizontal() {
+	log.Warn("BasicWindow() Horizontal() START w.vertical =", w.vertical, w.title)
+	if w == nil {return}
+	w.vertical = false
+	log.Warn("BasicWindow() Horizontal() END w.vertical =", w.vertical, w.title)
 }
 
 func (w *BasicWindow) Make() {
 	if ! w.Initialized() {return}
 	// various timeout settings
-	w.win = w.parent.RawWindow(w.name)
+	w.win = w.parent.RawWindow(w.title)
 	w.win.Custom = func() {
-		log.Warn("BasicWindow.Custom() closed. TODO: handle this", w.name)
+		log.Warn("BasicWindow.Custom() closed. TODO: handle this", w.title)
 	}
 	if w.vertical {
-		w.box = w.win.NewBox("bw vbox", false)
-		log.Log(INFO, "BasicWindow.Custom() made vbox")
+		w.box = w.win.NewVerticalBox("BW VBOX")
+		log.Log(INFO, "BasicWindow.Make() made NewVerticalBox", w.title)
 	} else {
-		w.box = w.win.NewBox("bw hbox", true)
-		log.Log(INFO, "BasicWindow.Custom() made hbox")
+		w.box = w.win.NewHorizontalBox("BW HBOX")
+		log.Log(INFO, "BasicWindow.Make() made NewHorizontalBox", w.title)
 	}
 
 	w.ready = true
@@ -110,29 +110,31 @@ func (w *BasicWindow) Make() {
 func (w *BasicWindow) Draw() {
 	if ! w.Initialized() {return}
 	// various timeout settings
-	w.win = w.parent.NewWindow(w.name)
+	w.win = w.parent.NewWindow(w.title)
 	w.win.Custom = func() {
-		log.Warn("BasicWindow.Custom() closed. TODO: handle this", w.name)
+		log.Warn("BasicWindow.Custom() closed. TODO: handle this", w.title)
 	}
+	log.Warn("BasicWindow.Draw() about to make a box vertical =", w.vertical, w.title)
 	if w.vertical {
-		w.box = w.win.NewBox("bw vbox", false)
-		log.Log(INFO, "BasicWindow.Custom() made vbox")
+		w.box = w.win.NewVerticalBox("BW VBOX")
+		log.Log(INFO, "BasicWindow.Draw() made vbox title =", w.title)
 	} else {
-		w.box = w.win.NewBox("bw hbox", true)
-		log.Log(INFO, "BasicWindow.Custom() made hbox")
+		w.box = w.win.NewHorizontalBox("BW HBOX")
+		log.Log(INFO, "BasicWindow.Draw() made hbox title =", w.title)
 	}
 
 	w.ready = true
 }
 
 
-func NewBasicWindow(parent *gui.Node, name string) *BasicWindow {
+func NewBasicWindow(parent *gui.Node, title string) *BasicWindow {
 	var w *BasicWindow
 	w = &BasicWindow {
 		parent: parent,
-		name: name,
+		title: title,
 		vertical: false,
 	}
+	log.Warn("NewBasicWindow() END")
 
 	return w
 }

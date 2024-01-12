@@ -70,7 +70,7 @@ func NewBasicEntry(p *gui.Node, name string) *BasicEntry {
 	d.l = p.NewLabel(name)
 	d.v = p.NewEntryLine("")
 	d.v.Custom = func() {
-		d.value = d.v.S
+		d.value = d.v.GetText()
 		log.Log(INFO, "BasicEntry.Custom() user changed value to =", d.value)
 		if d.Custom != nil {
 			d.Custom()
